@@ -2,26 +2,25 @@ package com.rbc.challenge.dao;
 
 import com.rbc.challenge.model.entity.IndexData;
 import com.rbc.challenge.model.entity.IndexDataPK;
-import org.springframework.data.r2dbc.repository.Query;
-import org.springframework.data.repository.reactive.ReactiveCrudRepository;
-import org.springframework.scheduling.annotation.Async;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-import reactor.core.publisher.Flux;
+
+import java.util.List;
 
 /**
  * IndexData Repository to interact with database. (Data Access Object)
  */
-@Async
 @Repository
-public interface IndexDataRepository extends ReactiveCrudRepository<IndexData, IndexDataPK> {
+public interface IndexDataRepository extends CrudRepository<IndexData, IndexDataPK> {
 
     /**
      * Find all IndexData by Stock
      *
      * @param stockSymbol Stock abbreviation eg. AA
-     * @return Flux stream with IndexData rows.
+     * @return List of IndexData rows.
      */
-    @Query("SELECT i.* FROM index_data i WHERE i.stock_symbol = :stockSymbol")
-    Flux<IndexData> findAllByStockSymbol(String stockSymbol);
+    @Query("SELECT i FROM IndexData i WHERE i.stockDateComposePk.stockSymbol = :stockSymbol")
+    List<IndexData> findAllByStockSymbol(String stockSymbol);
 
 }

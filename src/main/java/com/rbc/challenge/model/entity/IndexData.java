@@ -51,8 +51,8 @@ public class IndexData {
     @Column
     private Long previousWeeksVolume;
 
-    @Column
-    private Double nextWeekOpen;
+    @Column(name = "next_week_open")
+    private Double nextWeeksOpen;
 
     @Column
     private Double nextWeeksClose;

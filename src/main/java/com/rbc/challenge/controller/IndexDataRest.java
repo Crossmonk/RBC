@@ -1,33 +1,56 @@
 package com.rbc.challenge.controller;
 
 
-import com.rbc.challenge.model.entity.IndexData;
-import com.rbc.challenge.service.implementation.IndexDataImp;
+import com.rbc.challenge.model.dto.IndexData;
+import com.rbc.challenge.service.implementation.IndexDataRulesImp;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import reactor.core.publisher.Flux;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 /**
  * RestApi endpoints definition
  */
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/index/data/set")
+@RequestMapping("/index/data/sets")
 public class IndexDataRest {
 
-    private final IndexDataImp service;
+    private final IndexDataRulesImp service;
 
     /**
      * Get endpoint following best practices to fetch data from RestApi.
      *
-     * @return Flux stream with multiple IndexData.
+     * @return List with multiple IndexData.
      */
     @GetMapping
-    public Flux<IndexData> getAllDataByStockTicket(@RequestParam("stockTicket") String stockTicket) {
+    @ResponseStatus(HttpStatus.OK)
+    public List<IndexData> getAllDataByStockTicket(@RequestParam("stockTicket") String stockTicket) {
         return service.getByStockTicket(stockTicket);
+    }
+
+    /**
+     * Add a new IndexData row.
+     *
+     * @return Created IndexData information.
+     */
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public IndexData addNewRecord(@RequestBody IndexData data) {
+        return service.addIndexData(data);
+    }
+
+    /**
+     * CSV File upload endpoint for bulk loading.
+     *
+     * @param file CSV File
+     */
+    @PostMapping(value = "/bulk/csv", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public void bulkAdd(@RequestPart(value = "upFile") MultipartFile file) {
+        service.bulkAdd(file);
     }
 
 }
