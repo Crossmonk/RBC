@@ -3,6 +3,7 @@ package com.rbc.challenge.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rbc.challenge.model.dto.IndexData;
 import com.rbc.challenge.service.implementation.IndexDataRuleImp;
+import org.apache.commons.collections4.IterableUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
@@ -123,7 +124,8 @@ class IndexDataRestTest {
         dtoData.setDaysToNextDividend(0);
 
 
-        Mockito.doNothing().when(service).bulkAdd(ArgumentMatchers.any());
+        Mockito.when(service.bulkAdd(ArgumentMatchers.any()))
+                .thenReturn(IterableUtils.emptyIterable());
 
         //Act
         mvc.perform(MockMvcRequestBuilders.post("/index/data/sets/bulk/csv")
@@ -140,7 +142,8 @@ class IndexDataRestTest {
         MockMultipartFile file =
                 new MockMultipartFile("upFile", "dow_jones_index.data", "text/csv", inputFile);
 
-        Mockito.doNothing().when(service).bulkAdd(ArgumentMatchers.any());
+        Mockito.when(service.bulkAdd(ArgumentMatchers.any()))
+                .thenReturn(IterableUtils.emptyIterable());
 
         //Act
         mvc.perform(MockMvcRequestBuilders.multipart("/index/data/sets/bulk/csv")
