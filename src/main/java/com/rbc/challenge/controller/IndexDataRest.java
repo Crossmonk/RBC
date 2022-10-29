@@ -2,7 +2,7 @@ package com.rbc.challenge.controller;
 
 
 import com.rbc.challenge.model.dto.IndexData;
-import com.rbc.challenge.service.implementation.IndexDataRulesImp;
+import com.rbc.challenge.service.implementation.IndexDataRuleImp;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -19,7 +19,7 @@ import java.util.List;
 @RequestMapping("/index/data/sets")
 public class IndexDataRest {
 
-    private final IndexDataRulesImp service;
+    private final IndexDataRuleImp service;
 
     /**
      * Get endpoint following best practices to fetch data from RestApi.

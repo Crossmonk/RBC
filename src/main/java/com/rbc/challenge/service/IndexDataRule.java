@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Business rules definition
  */
-public interface IndexDataRules {
+public interface IndexDataRule {
     /**
      * Find all IndexData.
      *
@@ -28,5 +28,5 @@ public interface IndexDataRules {
      *
      * @param file Multipart file with records
      */
-    void bulkAdd(MultipartFile file);
+    Iterable<com.rbc.challenge.model.entity.IndexData> bulkAdd(MultipartFile file);
 }

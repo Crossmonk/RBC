@@ -5,7 +5,7 @@ import com.opencsv.bean.CsvToBeanBuilder;
 import com.rbc.challenge.dao.IndexDataRepository;
 import com.rbc.challenge.mapper.IndexDataMap;
 import com.rbc.challenge.model.dto.IndexData;
-import com.rbc.challenge.service.IndexDataRules;
+import com.rbc.challenge.service.IndexDataRule;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -26,7 +26,7 @@ import java.util.List;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class IndexDataRulesImp implements IndexDataRules {
+public class IndexDataRuleImp implements IndexDataRule {
 
     private final IndexDataMap map;
     private final IndexDataRepository indexDataRepository;
@@ -56,7 +56,7 @@ public class IndexDataRulesImp implements IndexDataRules {
     }
 
     @Override
-    public void bulkAdd(MultipartFile file) {
+    public Iterable<com.rbc.challenge.model.entity.IndexData> bulkAdd(MultipartFile file) {
         if (file.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Please upload a file.");
         } else {
@@ -68,10 +68,7 @@ public class IndexDataRulesImp implements IndexDataRules {
 
                 //FOR BULK UPLOAD I WOULD EVALUATE OTHER APPROACHES.
                 List<IndexData> dtoList = csvToBean.parse();
-
-                indexDataRepository.saveAll(map.toEntity(dtoList));
-
-
+                return indexDataRepository.saveAll(map.toEntity(dtoList));
             } catch (IOException e) {
                 throw new ResponseStatusException(HttpStatus.CONFLICT, "I/O Error processing file.");
             }
